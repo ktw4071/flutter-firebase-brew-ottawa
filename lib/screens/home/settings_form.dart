@@ -17,8 +17,8 @@ class _SettingsFormState extends State<SettingsForm> {
 
   // form values
   String _currentName;
-  String _currentSugars = '0';
-  int _currentStrength = 100;
+  String _currentSugars;
+  int _currentStrength;
  
   @override
   Widget build(BuildContext context) {
@@ -75,9 +75,14 @@ class _SettingsFormState extends State<SettingsForm> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    print(_currentName);
-                    print(_currentSugars);
-                    print(_currentStrength);
+                    if(_formKey.currentState.validate()) {
+                      await DatabaseService(uid: user.uid).updateUserData(
+                        _currentSugars ?? userData.sugars, 
+                        _currentName ?? userData.name, 
+                        _currentStrength ?? userData.strength
+                      );
+                      Navigator.pop(context);
+                    }
                   }
                 ),
               ],
